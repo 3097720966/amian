@@ -1,0 +1,534 @@
+/* 微信手机：不使用 backdrop-filter / 大面积阴影，减轻 iOS WebView 压力 */
+.wxp-ball {
+  position: fixed;
+  z-index: 2147483000;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #07c160;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wxp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483001;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', 'Noto Sans SC', sans-serif;
+}
+
+.wxp-phone {
+  --wxp-green: #07c160;
+  --wxp-bubble-me: #95ec69;
+  --wxp-bg: #ededed;
+  --wxp-line: #dcdcdc;
+  --wxp-text: #191919;
+  --wxp-sub: #8a8a8a;
+  position: relative;
+  box-sizing: border-box;
+  width: min(393px, 100vw);
+  height: min(852px, 100vh);
+  height: min(852px, 100dvh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--wxp-bg);
+  color: var(--wxp-text);
+  border-radius: 44px;
+  border: 8px solid #111;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.wxp-phone *,
+.wxp-phone *::before,
+.wxp-phone *::after {
+  box-sizing: border-box;
+}
+.wxp-phone button,
+.wxp-phone input,
+.wxp-phone textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* 状态栏（桌面预览用；手机上让位给真实状态栏） */
+.wxp-status {
+  flex: none;
+  height: 44px;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--wxp-bg);
+  font-size: 15px;
+  font-weight: 600;
+}
+.wxp-island {
+  width: 96px;
+  height: 26px;
+  border-radius: 13px;
+  background: #000;
+}
+.wxp-status-r {
+  font-size: 13px;
+}
+
+.wxp-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.wxp-page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+.wxp-page--grey,
+.wxp-page--chat {
+  background: var(--wxp-bg);
+}
+
+.wxp-home {
+  flex: none;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.wxp-home span {
+  width: 120px;
+  height: 5px;
+  border-radius: 3px;
+  background: #111;
+}
+
+/* 导航条 */
+.wxp-bar {
+  flex: none;
+  height: 46px;
+  display: grid;
+  grid-template-columns: 56px 1fr 56px;
+  align-items: center;
+  background: var(--wxp-bg);
+  border-bottom: 1px solid var(--wxp-line);
+}
+.wxp-bar-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wxp-bar-side {
+  display: flex;
+  padding-left: 6px;
+}
+.wxp-bar-side--right {
+  justify-content: flex-end;
+  padding: 0 6px 0 0;
+}
+.wxp-bar-btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.wxp-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.wxp-pad {
+  padding: 14px 0 28px;
+}
+
+/* 搜索 + 会话列表 */
+.wxp-searchwrap {
+  flex: none;
+  padding: 8px 10px;
+  background: var(--wxp-bg);
+}
+.wxp-search {
+  width: 100%;
+  height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 15px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.wxp-item {
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.wxp-item:active {
+  background: #ececec;
+}
+.wxp-avatar {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+.wxp-item-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.wxp-item-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.wxp-item-name {
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wxp-tag {
+  flex: none;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: #e6f7ee;
+  color: var(--wxp-green);
+  font-size: 11px;
+  line-height: 17px;
+}
+.wxp-item-sub {
+  color: var(--wxp-sub);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wxp-item-time {
+  flex: none;
+  align-self: flex-start;
+  margin-top: 4px;
+  color: #b2b2b2;
+  font-size: 12px;
+}
+.wxp-empty {
+  padding: 56px 28px;
+  text-align: center;
+}
+.wxp-empty p {
+  margin: 0 0 8px;
+}
+.wxp-empty-sub {
+  color: var(--wxp-sub);
+  font-size: 14px;
+  margin-bottom: 18px !important;
+}
+
+/* 聊天 */
+.wxp-msgs {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wxp-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+.wxp-row.is-me {
+  justify-content: flex-end;
+}
+.wxp-row .wxp-avatar {
+  width: 38px;
+  height: 38px;
+  font-size: 16px;
+}
+.wxp-bubble {
+  position: relative;
+  max-width: 70%;
+  padding: 9px 12px;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 16px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.wxp-row.is-me .wxp-bubble {
+  background: var(--wxp-bubble-me);
+}
+.wxp-bubble::before {
+  content: '';
+  position: absolute;
+  top: 13px;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+  transform: rotate(45deg);
+}
+.wxp-row.is-them .wxp-bubble::before {
+  left: -3px;
+}
+.wxp-row.is-me .wxp-bubble::before {
+  right: -3px;
+}
+
+.wxp-composer {
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--wxp-bg);
+  border-top: 1px solid var(--wxp-line);
+}
+.wxp-input {
+  flex: 1;
+  min-height: 38px;
+  max-height: 110px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 16px;
+  line-height: 22px;
+  resize: none;
+  outline: none;
+}
+.wxp-send {
+  flex: none;
+  height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--wxp-green);
+  color: #fff !important;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* 设置 */
+.wxp-group {
+  margin: 0 0 14px;
+  background: #fff;
+  border-top: 1px solid var(--wxp-line);
+  border-bottom: 1px solid var(--wxp-line);
+}
+.wxp-srow {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 0;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  cursor: pointer;
+}
+.wxp-srow:last-child {
+  border-bottom: 0;
+}
+.wxp-srow.is-danger {
+  justify-content: center;
+  color: #fa5151;
+}
+.wxp-srow-label {
+  flex: 1;
+}
+.wxp-srow-detail {
+  max-width: 55%;
+  color: var(--wxp-sub);
+  font-size: 14px;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wxp-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.wxp-field:last-child {
+  border-bottom: 0;
+}
+.wxp-field-label {
+  flex: none;
+  width: 96px;
+  font-size: 15px;
+}
+.wxp-text {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 15px;
+  text-align: right;
+  outline: none;
+}
+.wxp-switch {
+  flex: none;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 48px;
+  height: 28px;
+  margin: 0;
+  border-radius: 14px;
+  background: #d9d9d9;
+  cursor: pointer;
+}
+.wxp-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s;
+}
+.wxp-switch:checked {
+  background: var(--wxp-green);
+}
+.wxp-switch:checked::after {
+  transform: translateX(20px);
+}
+.wxp-note {
+  margin: 0 14px 10px;
+  color: var(--wxp-sub);
+  font-size: 13px;
+}
+.wxp-btnrow {
+  display: flex;
+  gap: 10px;
+  margin: 0 14px;
+}
+.wxp-btn {
+  min-width: 112px;
+  height: 40px;
+  margin: 0 14px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--wxp-green);
+  color: #fff !important;
+  font-size: 15px;
+  cursor: pointer;
+}
+.wxp-btnrow .wxp-btn,
+.wxp-empty .wxp-btn {
+  margin: 0;
+}
+.wxp-btn:disabled {
+  opacity: 0.55;
+}
+.wxp-btn--ghost {
+  background: #fff;
+  color: var(--wxp-text) !important;
+  border: 1px solid var(--wxp-line);
+}
+
+.wxp-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 96px;
+  max-width: 82%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(30, 30, 30, 0.92);
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+  overflow-wrap: anywhere;
+}
+
+/* 手机屏幕：整屏显示，去掉假状态栏和边框，让位给真实状态栏与底部横条 */
+@media (max-width: 500px) {
+  .wxp-phone {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+  .wxp-status {
+    height: env(safe-area-inset-top, 0px);
+    padding: 0;
+    overflow: hidden;
+  }
+  .wxp-status > * {
+    display: none;
+  }
+  .wxp-home {
+    height: env(safe-area-inset-bottom, 0px);
+    pointer-events: none;
+    background: var(--wxp-bg);
+  }
+  .wxp-home span {
+    display: none;
+  }
+  .wxp-toast {
+    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+}
